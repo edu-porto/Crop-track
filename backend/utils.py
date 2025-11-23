@@ -19,13 +19,17 @@ def point_in_polygon(lat, lng, polygon_coords):
     if not polygon_coords or len(polygon_coords) < 3:
         return False
     
-    x, y = lng, lat
+    # Test point: x = longitude, y = latitude
+    x, y = float(lng), float(lat)
     n = len(polygon_coords)
     inside = False
     
-    p1x, p1y = polygon_coords[0]
+    # polygon_coords are stored as [lat, lng], so we need to swap them
+    # p1x = longitude (index 1), p1y = latitude (index 0)
+    p1x, p1y = float(polygon_coords[0][1]), float(polygon_coords[0][0])
+    
     for i in range(1, n + 1):
-        p2x, p2y = polygon_coords[i % n]
+        p2x, p2y = float(polygon_coords[i % n][1]), float(polygon_coords[i % n][0])
         if y > min(p1y, p2y):
             if y <= max(p1y, p2y):
                 if x <= max(p1x, p2x):
@@ -75,12 +79,6 @@ def validate_polygon(coordinates):
 def get_health_color(health_label):
     """
     Get color code for health label.
-    
-    Args:
-        health_label: Health status label
-        
-    Returns:
-        Color name (for CSS/marker icons)
     """
     color_map = {
         'healthy': 'green',
@@ -96,12 +94,6 @@ def get_health_color(health_label):
 def calculate_field_bounds(polygon_coords):
     """
     Calculate bounding box for a field polygon.
-    
-    Args:
-        polygon_coords: List of [lat, lng] pairs
-        
-    Returns:
-        Dictionary with min_lat, max_lat, min_lng, max_lng
     """
     if not polygon_coords:
         return None
@@ -117,4 +109,3 @@ def calculate_field_bounds(polygon_coords):
         'center_lat': (min(lats) + max(lats)) / 2,
         'center_lng': (min(lngs) + max(lngs)) / 2
     }
-

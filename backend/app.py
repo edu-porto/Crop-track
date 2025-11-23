@@ -842,7 +842,7 @@ def delete_field(field_id):
 
 @app.route('/api/fields/<int:field_id>/spots', methods=['POST'])
 def create_spot(field_id):
-    """Create a spot and analyze the uploaded image"""
+    """Create a spot and analyze the uploaded image with selected model"""
     try:
         field = Field.query.get_or_404(field_id)
         
@@ -865,6 +865,9 @@ def create_spot(field_id):
         file = request.files['image']
         if file.filename == '':
             return jsonify({'error': 'No image selected'}), 400
+        
+        # Get selected model from form data
+        selected_model = request.form.get('model')
         
         # Create upload directory
         upload_dir = Path('uploads') / f'field_{field_id}'
@@ -918,17 +921,23 @@ def create_spot(field_id):
                         'stress_signs': []
                     }
                 }
+                model_used = 'none'
             else:
-                # Load model and predict
+                # Use selected model if provided and available
                 model_name = None
-                preferred_models = ['CustomCNN1', 'CustomCNN2', 'CustomCNN3', 'EfficientNet', 'MobileNetV3']
-                for preferred in preferred_models:
-                    if preferred in model_paths:
-                        model_name = preferred
-                        break
                 
-                if not model_name and model_paths:
-                    model_name = list(model_paths.keys())[0]
+                if selected_model and selected_model in model_paths:
+                    model_name = selected_model
+                else:
+                    # Fallback to preferred models
+                    preferred_models = ['CustomCNN1', 'CustomCNN2', 'CustomCNN3', 'EfficientNet', 'MobileNetV3']
+                    for preferred in preferred_models:
+                        if preferred in model_paths:
+                            model_name = preferred
+                            break
+                    
+                    if not model_name and model_paths:
+                        model_name = list(model_paths.keys())[0]
                 
                 if not model_name:
                     raise ValueError('No models available')
@@ -942,11 +951,12 @@ def create_spot(field_id):
                 health_label = predictions['health_assessment']['label']
                 confidence = predictions['health_assessment']['confidence']
                 predictions_data = predictions
+                model_used = model_name
             
-            # Store analysis
+            # Store analysis with model info
             analysis = AnalysisResult(
                 spot_id=spot.id,
-                model_version='1.0',
+                model_version=model_used,  # Store which model was used
                 status=status,
                 health_label=health_label,
                 confidence=confidence,
@@ -974,7 +984,7 @@ def create_spot(field_id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-
+    
 @app.route('/api/spots/<int:spot_id>', methods=['GET'])
 def get_spot(spot_id):
     """Get spot details with full analysis"""

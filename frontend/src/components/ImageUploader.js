@@ -109,8 +109,8 @@ function ImageUploader() {
     <div className="App">
       <div className="container">
         <header className="header">
-          <h1>☕ Coffee Leaf Disease Classifier</h1>
-          <p>Upload an image of a coffee leaf to identify diseases using AI</p>
+          <h1>Crop Track</h1>
+          <p>Unique image classifier with custom AI models</p>
         </header>
 
         <div className="main-content">

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel }) {
+function SpotUploader({ fieldId, latitude, longitude, selectedModel, onUploadComplete, onCancel }) {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [notes, setNotes] = useState('');
   const [error, setError] = useState(null);
+  const [analysisResult, setAnalysisResult] = useState(null);
 
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
@@ -17,6 +18,7 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
       }
       setImage(file);
       setError(null);
+      setAnalysisResult(null);
       const reader = new FileReader();
       reader.onloadend = () => setPreview(reader.result);
       reader.readAsDataURL(file);
@@ -31,6 +33,7 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
 
     setLoading(true);
     setError(null);
+    setAnalysisResult(null);
     
     const formData = new FormData();
     formData.append('image', image);
@@ -38,6 +41,11 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
     formData.append('longitude', longitude);
     formData.append('notes', notes);
     formData.append('device', navigator.userAgent);
+    
+    // Pass the selected model to the backend
+    if (selectedModel) {
+      formData.append('model', selectedModel);
+    }
 
     try {
       const response = await axios.post(
@@ -45,21 +53,77 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
         formData,
         { 
           headers: { 'Content-Type': 'multipart/form-data' },
-          timeout: 60000 // 60 second timeout for analysis
+          timeout: 120000 // 2 minute timeout for analysis
         }
       );
       
-      onUploadComplete(response.data);
-      setImage(null);
-      setPreview(null);
-      setNotes('');
+      // Show analysis result before closing
+      setAnalysisResult(response.data);
+      
+      // Auto-close after 2 seconds or let user click Done
+      setTimeout(() => {
+        if (onUploadComplete) {
+          onUploadComplete(response.data);
+        }
+      }, 2500);
+      
     } catch (err) {
       console.error('Upload error:', err);
-      setError(err.response?.data?.error || 'Error uploading spot. Make sure the spot is inside the field.');
+      setError(
+        err.response?.data?.error || 
+        'Error uploading spot. Make sure the spot is inside the field boundary.'
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  const getHealthColor = (label) => {
+    const colors = {
+      healthy: '#28a745',
+      mildly_stressed: '#ffc107',
+      diseased: '#fd7e14',
+      pest_damage: '#dc3545',
+      nutrient_deficiency: '#6f42c1',
+      unknown: '#6c757d'
+    };
+    return colors[label] || '#6c757d';
+  };
+
+  // Show analysis result
+  if (analysisResult) {
+    const analysis = analysisResult.analysis;
+    const healthLabel = analysis?.health_assessment?.label || 'unknown';
+    const confidence = analysis?.health_assessment?.confidence || 0;
+    
+    return (
+      <div className="analysis-result">
+        <h4>✅ Analysis Complete!</h4>
+        <div 
+          className="result-card"
+          style={{ borderLeftColor: getHealthColor(healthLabel) }}
+        >
+          <p className="result-label" style={{ color: getHealthColor(healthLabel) }}>
+            {healthLabel.replace('_', ' ').toUpperCase()}
+          </p>
+          <p className="result-confidence">
+            Confidence: {(confidence * 100).toFixed(1)}%
+          </p>
+          {analysis?.model_version && (
+            <p className="result-details">
+              Model: {analysis.model_version}
+            </p>
+          )}
+        </div>
+        <button 
+          className="btn-primary"
+          onClick={() => onUploadComplete(analysisResult)}
+        >
+          Done
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="spot-uploader">
@@ -75,7 +139,7 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
             <img src={preview} alt="Preview" className="image-preview-small" />
           ) : (
             <div className="upload-placeholder-small">
-              <p>Click to select image</p>
+              <p>📷 Click to select image</p>
             </div>
           )}
         </label>
@@ -83,7 +147,7 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
 
       <div className="notes-section">
         <textarea
-          placeholder="Notes (optional)"
+          placeholder="Notes (optional) - e.g., observed symptoms, weather conditions"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           disabled={loading}
@@ -91,7 +155,7 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
         />
       </div>
 
-      {error && <div className="error-message">{error}</div>}
+      {error && <div className="error-message">⚠️ {error}</div>}
 
       <div className="upload-actions">
         <button 
@@ -99,7 +163,7 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
           disabled={!image || loading}
           className="btn-primary"
         >
-          {loading ? 'Uploading & Analyzing...' : 'Upload & Analyze'}
+          {loading ? '🔄 Analyzing...' : '🔬 Upload & Analyze'}
         </button>
         {onCancel && (
           <button 
@@ -116,4 +180,3 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
 }
 
 export default SpotUploader;
-

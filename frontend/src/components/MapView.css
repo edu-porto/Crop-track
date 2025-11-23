@@ -14,26 +14,61 @@
 
 .map-sidebar h2 {
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
-.btn-primary, .btn-secondary, .btn-danger {
+/* Model Selector */
+.model-selector {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #e7f3ff;
+  border-radius: 8px;
+}
+
+.model-selector label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.model-select {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #007bff;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: white;
+  cursor: pointer;
+}
+
+.model-select:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Buttons */
+.btn-primary, .btn-secondary, .btn-danger, .btn-info {
   padding: 10px 15px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   margin: 5px 0;
   width: 100%;
+  transition: all 0.2s;
 }
 
 .btn-primary {
-  background: #007bff;
+  background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .btn-primary:disabled {
@@ -50,6 +85,15 @@
   background: #545b62;
 }
 
+.btn-info {
+  background: #17a2b8;
+  color: white;
+}
+
+.btn-info:hover:not(:disabled) {
+  background: #138496;
+}
+
 .btn-danger {
   background: #dc3545;
   color: white;
@@ -60,7 +104,7 @@
 }
 
 .fields-list {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .field-item {
@@ -68,14 +112,14 @@
   margin: 10px 0;
   background: white;
   border: 2px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .field-item:hover {
   border-color: #007bff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .field-item.selected {
@@ -101,7 +145,7 @@
 
 .field-actions {
   margin-top: 20px;
-  padding-top: 20px;
+  padding-top: 15px;
   border-top: 1px solid #ddd;
 }
 
@@ -119,8 +163,8 @@
   gap: 5px;
   background: white;
   padding: 5px;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .map-type-btn {
@@ -146,7 +190,7 @@
 .mode-indicator {
   padding: 10px;
   background: #f8f9fa;
-  border-radius: 4px;
+  border-radius: 6px;
   margin-bottom: 10px;
   text-align: center;
 }
@@ -156,13 +200,14 @@
   font-size: 13px;
 }
 
+/* Uploader Overlay */
 .uploader-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -172,17 +217,26 @@
 .uploader-modal {
   background: white;
   padding: 30px;
-  border-radius: 8px;
-  max-width: 500px;
+  border-radius: 12px;
+  max-width: 450px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
 .uploader-modal h3 {
   margin-top: 0;
+  color: #333;
 }
 
+.uploader-modal > p {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+/* Spot Uploader Styles */
 .spot-uploader {
   display: flex;
   flex-direction: column;
@@ -207,29 +261,44 @@
   width: 100%;
   max-height: 200px;
   object-fit: contain;
-  border: 2px dashed #ddd;
-  border-radius: 4px;
+  border: 2px solid #667eea;
+  border-radius: 8px;
   padding: 10px;
+  background: #f8f9ff;
 }
 
 .upload-placeholder-small {
   width: 100%;
   height: 150px;
-  border: 2px dashed #ddd;
-  border-radius: 4px;
+  border: 2px dashed #156015;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f9f9f9;
+  background: #f8f9ff;
+  color: #156015;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.upload-placeholder-small:hover {
+  background: #e7f0ff;
+  border-color: #156015;
 }
 
 .notes-section textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px;
   font-family: inherit;
   resize: vertical;
+  font-size: 14px;
+}
+
+.notes-section textarea:focus {
+  outline: none;
+  border-color: #667eea;
 }
 
 .upload-actions {
@@ -244,71 +313,75 @@
 .error-message {
   background: #f8d7da;
   color: #721c24;
-  padding: 10px;
-  border-radius: 4px;
-  margin: 10px 0;
+  padding: 12px;
+  border-radius: 6px;
   font-size: 14px;
+  border: 1px solid #f5c6cb;
 }
 
+/* Spot Popup */
 .spot-popup {
-  min-width: 200px;
+  min-width: 180px;
 }
 
 .spot-popup h4 {
-  margin-top: 0;
+  margin: 0 0 10px 0;
+  color: #333;
 }
 
 .spot-popup p {
   margin: 5px 0;
-  font-size: 14px;
-}
-
-.spot-details-panel {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  max-width: 400px;
-  z-index: 1000;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #999;
-}
-
-.close-btn:hover {
-  color: #333;
-}
-
-.analysis-details h4 {
-  margin-top: 0;
-}
-
-.analysis-details h5 {
-  margin: 15px 0 5px 0;
-  font-size: 14px;
-  color: #666;
-}
-
-.findings ul {
-  margin: 5px 0;
-  padding-left: 20px;
-}
-
-.findings li {
-  margin: 3px 0;
   font-size: 13px;
 }
 
+/* Model Info Box */
+.model-info-box {
+  background: #e7f3ff;
+  padding: 10px 12px;
+  border-radius: 6px;
+  text-align: center;
+  border: 1px solid #b8daff;
+}
+
+.model-info-box small {
+  color: #004085;
+}
+
+/* Analysis Result */
+.analysis-result {
+  text-align: center;
+  padding: 10px;
+}
+
+.analysis-result h4 {
+  color: #28a745;
+  margin-bottom: 15px;
+}
+
+.result-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 5px solid #ccc;
+  margin: 15px 0;
+  text-align: left;
+}
+
+.result-label {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.result-confidence {
+  font-size: 1rem;
+  color: #666;
+}
+
+.result-details {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}

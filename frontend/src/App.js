@@ -10,12 +10,12 @@ function App() {
       <nav style={{ 
         padding: '10px 20px', 
         background: '#f8f9fa', 
-        borderBottom: '1px solid #dee2e6',
+        borderBottom: '1px solidrgb(28, 100, 172)',
         display: 'flex',
         gap: '20px',
         alignItems: 'center'
       }}>
-        <h2 style={{ margin: 0 }}>☕ Crop Analysis System</h2>
+        <h2 style={{ margin: 0 }}>Crop Track</h2>
         <Link to="/" style={{ textDecoration: 'none', color: '#007bff', fontWeight: 'bold' }}>
           Map View
         </Link>

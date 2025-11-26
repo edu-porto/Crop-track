@@ -16,6 +16,7 @@ from torchvision import transforms
 from models import create_model_architecture
 from database import db, Field, Spot, AnalysisResult
 from utils import point_in_polygon, validate_polygon
+from field_calculations import calculate_field_metrics
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for React frontend
@@ -813,12 +814,37 @@ def get_fields():
 
 @app.route('/api/fields/<int:field_id>', methods=['GET'])
 def get_field(field_id):
-    """Get a specific field with all its spots"""
+    """Get a specific field with all its spots and metrics"""
     try:
         field = Field.query.get_or_404(field_id)
         result = field.to_dict()
         result['spots'] = [s.to_dict() for s in field.spots]
+
+        # Add field metrics (area, perimeter, etc.)
+        polygon_coords = field.get_polygon_coords()
+        if polygon_coords:
+            result['metrics'] = calculate_field_metrics(polygon_coords)
+
         return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/fields/<int:field_id>/metrics', methods=['GET'])
+def get_field_metrics(field_id):
+    """Get calculated metrics for a field (area, perimeter, centroid)"""
+    try:
+        field = Field.query.get_or_404(field_id)
+        polygon_coords = field.get_polygon_coords()
+
+        if not polygon_coords:
+            return jsonify({'error': 'Field has no polygon coordinates'}), 400
+
+        metrics = calculate_field_metrics(polygon_coords)
+        metrics['field_id'] = field_id
+        metrics['field_name'] = field.name
+
+        return jsonify(metrics)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

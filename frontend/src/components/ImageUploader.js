@@ -20,16 +20,16 @@ function ImageUploader() {
     try {
       const response = await axios.get('/api/models');
       console.log('Models response:', response.data);
-      
+
       const available = response.data.models.filter(m => m.available);
       setAvailableModels(available);
-      
+
       if (available.length > 0 && available[0].class_names) {
         setClassNames(available[0].class_names);
       } else {
         setClassNames([]);
       }
-      
+
       if (available.length > 0) {
         setSelectedModel(available[0].name);
       } else {
@@ -52,7 +52,7 @@ function ImageUploader() {
       setSelectedImage(file);
       setPrediction(null);
       setError(null);
-      
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -89,7 +89,7 @@ function ImageUploader() {
       setPrediction(response.data);
     } catch (err) {
       setError(
-        err.response?.data?.error || 
+        err.response?.data?.error ||
         'Failed to make prediction. Please try again.'
       );
       console.error('Prediction error:', err);
@@ -108,22 +108,17 @@ function ImageUploader() {
   return (
     <div className="App">
       <div className="container">
-        <header className="header">
-          <h1>Crop Track</h1>
-          <p>Unique image classifier with custom AI models</p>
-        </header>
-
-        <div className="main-content">
+        <div className="main-content-card">
           <div className="upload-section">
             <div className="upload-area">
               {imagePreview ? (
                 <div className="image-preview-container">
-                  <img 
-                    src={imagePreview} 
-                    alt="Preview" 
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
                     className="image-preview"
                   />
-                  <button 
+                  <button
                     className="remove-image-btn"
                     onClick={handleReset}
                     title="Remove image"
@@ -152,15 +147,15 @@ function ImageUploader() {
                       <polyline points="17 8 12 3 7 8" />
                       <line x1="12" y1="3" x2="12" y2="15" />
                     </svg>
-                    <p>Click to upload an image</p>
-                    <span>or drag and drop</span>
+                    <p>Click to upload a leaf image</p>
+                    <span>Supported formats: JPG, PNG, WEBP</span>
                   </div>
                 </label>
               )}
             </div>
 
             <div className="model-selector">
-              <label htmlFor="model-select">Select Model:</label>
+              <label htmlFor="model-select">AI Model</label>
               <select
                 id="model-select"
                 value={selectedModel}
@@ -180,7 +175,7 @@ function ImageUploader() {
               </select>
               {availableModels.length > 0 && (
                 <div className="model-info-text">
-                  {availableModels.length} model{availableModels.length !== 1 ? 's' : ''} available
+                  {availableModels.length} model{availableModels.length !== 1 ? 's' : ''} available for analysis
                 </div>
               )}
             </div>
@@ -190,20 +185,20 @@ function ImageUploader() {
               onClick={handlePredict}
               disabled={!selectedImage || !selectedModel || loading}
             >
-              {loading ? 'Analyzing...' : 'Analyze Image'}
+              {loading ? 'Analyzing Image...' : 'Analyze Image'}
             </button>
           </div>
 
           {error && (
             <div className="error-message">
-              <span>⚠️</span> {error}
+              <span>⚠</span> {error}
             </div>
           )}
 
           {prediction && (
             <div className="prediction-results">
-              <h2>Prediction Results</h2>
-              
+              <h2>Analysis Results</h2>
+
               <div className="main-prediction">
                 <div className="prediction-card">
                   <div className="prediction-label">
@@ -222,7 +217,7 @@ function ImageUploader() {
               </div>
 
               <div className="all-predictions">
-                <h3>All Class Probabilities</h3>
+                <h3>Class Probabilities</h3>
                 <div className="probability-list">
                   {prediction.top_predictions.map((item, index) => (
                     <div key={index} className="probability-item">
@@ -244,7 +239,7 @@ function ImageUploader() {
               </div>
 
               <div className="model-info">
-                <small>Model used: {prediction.model_used}</small>
+                Model used: {prediction.model_used}
               </div>
             </div>
           )}
@@ -255,4 +250,3 @@ function ImageUploader() {
 }
 
 export default ImageUploader;
-

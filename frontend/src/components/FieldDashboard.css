@@ -58,13 +58,13 @@
 .dashboard-icon {
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+  background: linear-gradient(135deg, var(--accent-500), var(--accent-700));
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.3);
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
 }
 
 .dashboard-title-group h1 {
@@ -175,8 +175,8 @@
 }
 
 .stat-card-icon.purple {
-  background: #f3e8ff;
-  color: #7c3aed;
+  background: var(--accent-100);
+  color: var(--accent-600);
 }
 
 .stat-card-value {
@@ -196,7 +196,7 @@
 }
 
 .stat-card-value.purple {
-  color: #7c3aed;
+  color: var(--accent-600);
 }
 
 .stat-card-subtitle {
@@ -642,6 +642,11 @@
 }
 
 /* Dashboard Footer */
+/* Weather Section */
+.dashboard-weather-section {
+  padding: 0 32px 24px;
+}
+
 .dashboard-footer {
   padding: 20px 32px;
   background: white;
@@ -664,12 +669,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
 }
 
 .btn-primary-large:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35);
 }
 
 /* Loading State */
@@ -925,6 +930,10 @@
     font-size: 0.8rem;
   }
 
+  .dashboard-weather-section {
+    padding: 0 16px 16px;
+  }
+
   .dashboard-footer {
     padding: 14px 16px;
   }
@@ -937,6 +946,9 @@
 
 /* Very small screens */
 @media (max-width: 480px) {
+  .dashboard-weather-section {
+    padding: 0 12px 12px;
+  }
   .dashboard-stats-grid {
     gap: 8px;
     padding: 10px 12px;

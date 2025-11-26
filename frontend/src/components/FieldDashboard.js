@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import WeatherWidget from './WeatherWidget';
 import './FieldDashboard.css';
 
 function FieldDashboard({ field, data, onClose }) {
@@ -397,6 +398,14 @@ function FieldDashboard({ field, data, onClose }) {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Weather Section */}
+        <div className="dashboard-weather-section">
+          <WeatherWidget
+            latitude={field?.metrics?.centroid?.lat || field?.polygon_coordinates?.[0]?.[0]}
+            longitude={field?.metrics?.centroid?.lon || field?.polygon_coordinates?.[0]?.[1]}
+          />
         </div>
 
         {/* Footer */}

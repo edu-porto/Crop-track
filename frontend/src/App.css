@@ -1,5 +1,6 @@
 /* ==========================================
-   APP LAYOUT - Corporate Executive Theme
+   APP LAYOUT - CropTrack Agricultural Theme
+   Green + Purple | Agriculture + Technology
    ========================================== */
 
 .app-layout {
@@ -44,7 +45,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
 }
 
 .logo-icon svg {
@@ -122,7 +123,7 @@
 .nav-link.active {
   background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
   color: white;
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
 }
 
 /* Sidebar Footer */
@@ -433,7 +434,7 @@
 .model-select:focus {
   outline: none;
   border-color: var(--primary-500);
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
 }
 
 .model-select:disabled {
@@ -459,12 +460,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
 }
 
 .predict-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.45);
 }
 
 .predict-btn:disabled {
@@ -512,7 +513,7 @@
   color: white;
   padding: 32px;
   border-radius: var(--radius-xl);
-  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+  box-shadow: 0 10px 30px rgba(5, 150, 105, 0.3);
 }
 
 .prediction-label {

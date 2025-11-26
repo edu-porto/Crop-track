@@ -35,6 +35,21 @@ function MapView() {
   const [pendingFieldData, setPendingFieldData] = useState(null);
   const [fieldNameInput, setFieldNameInput] = useState('');
   const [savingField, setSavingField] = useState(false);
+  const [flyToField, setFlyToField] = useState(null);
+
+  // Component to control map view (fly to field bounds)
+  const MapController = ({ field }) => {
+    const map = useMap();
+
+    useEffect(() => {
+      if (field && field.polygon_coordinates && field.polygon_coordinates.length > 0) {
+        const bounds = L.latLngBounds(field.polygon_coordinates);
+        map.flyToBounds(bounds, { padding: [50, 50], duration: 0.8 });
+      }
+    }, [field, map]);
+
+    return null;
+  };
 
   useEffect(() => {
     fetchFields();
@@ -258,6 +273,7 @@ function MapView() {
           onClick={() => {
             setDrawingMode('field');
             setSelectedField(null);
+            setFlyToField(null);
             setShowUploader(false);
             setShowDashboard(false);
           }}
@@ -297,6 +313,7 @@ function MapView() {
                 className={`field-item ${selectedField?.id === field.id ? 'selected' : ''}`}
                 onClick={async () => {
                   setSelectedField(field);
+                  setFlyToField(field);
                   setDrawingMode(null);
                   setShowDashboard(false);
                   await fetchFieldDetails(field.id);
@@ -507,6 +524,9 @@ function MapView() {
             />
           )}
 
+          {/* Map Controller for centering on fields */}
+          <MapController field={flyToField} />
+
           {drawingMode === 'field' && (
             <PolygonDrawer
               onComplete={handlePolygonComplete}
@@ -522,9 +542,9 @@ function MapView() {
               key={field.id}
               positions={field.polygon_coordinates}
               pathOptions={{
-                color: selectedField?.id === field.id ? '#3b82f6' : '#64748b',
-                fillColor: selectedField?.id === field.id ? '#3b82f6' : '#64748b',
-                fillOpacity: selectedField?.id === field.id ? 0.35 : 0.15,
+                color: selectedField?.id === field.id ? '#059669' : '#22c55e',
+                fillColor: selectedField?.id === field.id ? '#10b981' : '#86efac',
+                fillOpacity: selectedField?.id === field.id ? 0.4 : 0.2,
                 weight: selectedField?.id === field.id ? 3 : 2,
                 dashArray: drawingMode === 'spot' && selectedField?.id === field.id ? '5, 10' : null
               }}
@@ -533,6 +553,9 @@ function MapView() {
               eventHandlers={drawingMode !== 'spot' ? {
                 click: () => {
                   setSelectedField(field);
+                  setFlyToField(field);
+                  setShowDashboard(false);
+                  setDrawingMode(null);
                   fetchFieldDetails(field.id);
                 }
               } : {}}

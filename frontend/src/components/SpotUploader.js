@@ -19,7 +19,12 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
         const response = await axios.get('/api/models');
         const models = response.data.models.filter(m => m.available);
         setAvailableModels(models);
-        if (models.length > 0) {
+
+        // Load saved model from localStorage or use first available
+        const savedModel = localStorage.getItem('croptrack_selected_model');
+        if (savedModel && models.some(m => m.name === savedModel)) {
+          setSelectedModel(savedModel);
+        } else if (models.length > 0) {
           setSelectedModel(models[0].name);
         }
       } catch (err) {
@@ -28,6 +33,13 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
     };
     fetchModels();
   }, []);
+
+  // Save selected model to localStorage when changed
+  const handleModelChange = (e) => {
+    const newModel = e.target.value;
+    setSelectedModel(newModel);
+    localStorage.setItem('croptrack_selected_model', newModel);
+  };
 
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
@@ -225,46 +237,47 @@ function SpotUploader({ fieldId, latitude, longitude, onUploadComplete, onCancel
         </div>
       </div>
 
-      {/* Location Info Card */}
-      <div className="location-info-card">
-        <div className="location-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
+      {/* Location and Model Row */}
+      <div className="upload-info-row">
+        <div className="location-info-card">
+          <div className="location-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div className="location-details">
+            <span className="location-label">Location</span>
+            <span className="location-coords">{latitude.toFixed(4)}, {longitude.toFixed(4)}</span>
+          </div>
         </div>
-        <div className="location-details">
-          <span className="location-label">Capture Location</span>
-          <span className="location-coords">{latitude.toFixed(6)}, {longitude.toFixed(6)}</span>
-        </div>
-      </div>
 
-      {/* Model Selector */}
-      <div className="model-selector-card">
-        <div className="model-selector-header">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-            <line x1="8" y1="21" x2="16" y2="21"/>
-            <line x1="12" y1="17" x2="12" y2="21"/>
-          </svg>
-          <span>AI Model</span>
+        <div className="model-selector-card">
+          <div className="model-selector-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+            <span>AI Model</span>
+          </div>
+          <select
+            className="model-dropdown"
+            value={selectedModel}
+            onChange={handleModelChange}
+            disabled={loading}
+          >
+            {availableModels.length === 0 ? (
+              <option value="">Loading...</option>
+            ) : (
+              availableModels.map((model) => (
+                <option key={model.name} value={model.name}>
+                  {model.name}
+                </option>
+              ))
+            )}
+          </select>
         </div>
-        <select
-          className="model-dropdown"
-          value={selectedModel}
-          onChange={(e) => setSelectedModel(e.target.value)}
-          disabled={loading}
-        >
-          {availableModels.length === 0 ? (
-            <option value="">Loading models...</option>
-          ) : (
-            availableModels.map((model) => (
-              <option key={model.name} value={model.name}>
-                {model.name} ({model.num_classes} classes)
-              </option>
-            ))
-          )}
-        </select>
       </div>
 
       {/* Upload Area */}

@@ -1,0 +1,257 @@
+/* ==========================================
+   WEATHER WIDGET - Agricultural Theme Design
+   ========================================== */
+
+.weather-widget {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  color: white;
+  box-shadow: 0 8px 32px rgba(5, 150, 105, 0.25);
+  overflow: hidden;
+}
+
+.weather-widget.loading,
+.weather-widget.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  gap: 12px;
+  background: linear-gradient(135deg, #2d3f36, #445249);
+}
+
+.weather-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.weather-error-icon {
+  font-size: 2rem;
+}
+
+/* Current Weather */
+.weather-current {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.weather-current-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.weather-icon-large {
+  font-size: 3rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.weather-temp-main {
+  display: flex;
+  align-items: flex-start;
+}
+
+.weather-temp-value {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.weather-temp-unit {
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin-top: 4px;
+  opacity: 0.8;
+}
+
+.weather-current-details {
+  text-align: right;
+}
+
+.weather-description {
+  font-size: 1rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.weather-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.weather-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.stat-icon {
+  font-size: 0.9rem;
+}
+
+/* 7-Day Forecast */
+.weather-forecast {
+  margin-top: 8px;
+}
+
+.weather-forecast-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.weather-forecast-list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+
+.weather-forecast-list::-webkit-scrollbar {
+  height: 4px;
+}
+
+.weather-forecast-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.weather-forecast-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.weather-day {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  min-width: 70px;
+  transition: all 0.2s ease;
+}
+
+.weather-day:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.weather-day.today {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.day-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+.day-icon {
+  font-size: 1.5rem;
+}
+
+.day-temps {
+  display: flex;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.day-temp-max {
+  font-weight: 700;
+}
+
+.day-temp-min {
+  opacity: 0.6;
+}
+
+.day-rain {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.rain-icon {
+  font-size: 0.65rem;
+}
+
+/* Attribution */
+.weather-attribution {
+  margin-top: 12px;
+  font-size: 0.65rem;
+  text-align: right;
+  opacity: 0.5;
+}
+
+.weather-attribution a {
+  color: white;
+  text-decoration: none;
+}
+
+.weather-attribution a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .weather-widget {
+    padding: 16px;
+  }
+
+  .weather-icon-large {
+    font-size: 2.5rem;
+  }
+
+  .weather-temp-value {
+    font-size: 2.5rem;
+  }
+
+  .weather-current {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .weather-current-details {
+    text-align: left;
+    width: 100%;
+  }
+
+  .weather-stats {
+    justify-content: flex-start;
+  }
+
+  .weather-day {
+    min-width: 60px;
+    padding: 8px 10px;
+  }
+
+  .day-icon {
+    font-size: 1.25rem;
+  }
+}
